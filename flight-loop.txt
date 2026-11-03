@@ -1,0 +1,10 @@
+A typical flight loop (500 Hz):
+1. Interrupt from IMU: new data ready.
+2. Read gyro and accelerometer over SPI (microseconds).
+3. Convert raw counts to rad/s and g; subtract the gyro bias measured on the pad.
+4. Update the attitude estimate (sensor fusion; integrating the gyro dominates during powered flight,
+since the accelerometer can’t see tilt under thrust).
+5. Run pitch and yaw PID loops (D term from the filtered gyro, per TVC Insight #3).
+6. Clamp to gimbal limits, convert gimbal angle → servo angle → pulse width.
+7. Write servo PWM (the servo itself may only act at 50–333 Hz).
+8. Every Nth loop, buffer a log line; write to flash or SD in chunks

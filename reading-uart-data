@@ -1,0 +1,8 @@
+import serial
+ser = serial.Serial("COM3", 115200, timeout=1) # Linux/Mac: "/dev/ttyUSB0" or "/dev/ttyACM0"
+while True:
+    line = ser.readline().decode(errors="ignore").strip() # bytes -> text
+parts = line.split(",") # "1.0,2.0" -> ["1.0", "2.0"]
+if len(parts) == 3:
+    t, setpoint, measured = map(float, parts) # convert each to float
+print(f"t={t:.3f} error={setpoint - measured:.3f}")
